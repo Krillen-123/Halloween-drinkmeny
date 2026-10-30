@@ -1,0 +1,45 @@
+name: Publish Halloween drink menu
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Assemble app files
+        run: |
+          mkdir -p dist/assets/original dist/icons
+          cp index.html manifest.webmanifest service-worker.js dist/
+          cp -R assets/original/. dist/assets/original/
+          cp -R icons/. dist/icons/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Publish Pages site
+        id: deployment
+        uses: actions/deploy-pages@v4

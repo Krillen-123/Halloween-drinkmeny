@@ -1,0 +1,20 @@
+{
+  "name": "Spöklik Drinkmeny",
+  "short_name": "Drinkmeny",
+  "description": "Tre spöklika drinkar till Halloweenfirandet i Farhult.",
+  "lang": "sv",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#10100d",
+  "theme_color": "#10100d",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

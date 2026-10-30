@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10100d">
+  <meta name="description" content="Tre spöklika drinkar till Halloweenfirandet i Farhult.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <title>Spöklik Drinkmeny</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #efe3d3;
+      --muted: #b9a8c2;
+      --night: #0a0610;
+      --panel: #150d1c;
+      --line: #382342;
+      --orange: #e0242c;
+      --green: #3ddc84;
+      --blue: #4fc3f7;
+      font-family: Georgia, "Palatino Linotype", serif;
+      background: var(--night);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(120% 60% at 50% 0%, #2a1240 0%, transparent 60%),
+        radial-gradient(100% 50% at 50% 100%, #3a0d0a 0%, transparent 60%),
+        var(--night);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+    button, a { color: inherit; font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 2px solid #e8c879; outline-offset: 4px; }
+    #app { position: relative; z-index: 2; width: min(100%, 520px); margin: 0 auto; padding: 0 0 max(28px, env(safe-area-inset-bottom)); }
+    [hidden] { display: none !important; }
+    .fog { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .fog i { position: absolute; left: -20%; width: 140%; height: 40%; border-radius: 50%; background: radial-gradient(closest-side, rgba(170,150,210,.16), transparent); filter: blur(18px); animation: drift 26s linear infinite; }
+    .fog i:nth-child(1) { top: 8%; }
+    .fog i:nth-child(2) { top: 45%; animation-duration: 34s; animation-direction: reverse; background: radial-gradient(closest-side, rgba(90,200,140,.1), transparent); }
+    .fog i:nth-child(3) { top: 75%; animation-duration: 40s; }
+    .bat { position: fixed; z-index: 1; top: 12%; left: -40px; font-size: 22px; opacity: .75; pointer-events: none; filter: drop-shadow(0 0 4px #000); animation: fly 16s linear infinite; }
+    .bat:nth-of-type(2) { top: 30%; font-size: 16px; animation-duration: 22s; animation-delay: 6s; }
+    .bat:nth-of-type(3) { top: 60%; font-size: 18px; animation-duration: 28s; animation-delay: 12s; }
+    .web { position: fixed; z-index: 1; top: 0; width: 110px; height: 110px; opacity: .4; pointer-events: none; }
+    .web.tl { left: 0; }
+    .web.tr { right: 0; transform: scaleX(-1); }
+    @keyframes drift { 0%, 100% { transform: translateX(-8%); } 50% { transform: translateX(8%); } }
+    @keyframes fly { 0% { transform: translate(0,0) rotate(-6deg); } 50% { transform: translate(58vw,14px) rotate(-6deg); } 100% { transform: translate(120vw,0) rotate(-6deg); } }
+    .masthead { position: relative; padding: 0 0 22px; text-align: center; }
+    .banner { position: relative; margin: 0 0 6px; }
+    .banner img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(to bottom,#000 88%,transparent); mask-image: linear-gradient(to bottom,#000 88%,transparent); }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .eyebrow { margin: 0 0 12px; color: #d7b4e7; font: 700 11px/1.3 sans-serif; letter-spacing: 2px; text-shadow: 0 0 12px #662d82; }
+    h1 { margin: 0; font-size: 46px; font-weight: 400; line-height: .96; text-shadow: 0 0 22px rgba(177,77,215,.54), 0 3px 4px #000; }
+    .subtitle { margin: 15px 0 0; color: var(--muted); font-style: italic; line-height: 1.5; }
+    .cards { display: grid; gap: 18px; padding: 0 16px; }
+    .card {
+      --accent: var(--orange);
+      display: grid;
+      grid-template-columns: 38% minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      min-height: 122px;
+      padding: 12px;
+      text-align: left;
+      text-decoration: none;
+      background: linear-gradient(160deg,rgba(255,255,255,.04),rgba(0,0,0,.35)),var(--panel);
+      border: 1px solid color-mix(in srgb,var(--accent) 55%,#000);
+      border-left: 1px solid color-mix(in srgb,var(--accent) 55%,#000);
+      border-radius: 14px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.6),0 0 22px color-mix(in srgb,var(--accent) 30%,transparent);
+      transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    .card:active { transform: scale(.99); }
+    .card:nth-child(2) { --accent: var(--green); }
+    .card:nth-child(3) { --accent: var(--blue); }
+    .card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(0,0,0,.6),0 0 30px color-mix(in srgb,var(--accent) 45%,transparent); }
+    .art { align-self: start; overflow: hidden; border-radius: 10px; box-shadow: 0 0 16px color-mix(in srgb,var(--accent) 45%,transparent); }
+    .art img { display: block; width: 100%; height: auto; }
+    .info { display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+    .name-image { display: block; width: 100%; height: auto; }
+    .original { display: block; margin-top: 5px; color: var(--muted); font: 12px/1.4 sans-serif; }
+    .teaser { margin: 9px 0 0; color: var(--ink); font-size: 13px; font-style: italic; line-height: 1.4; }
+    .arrow { display: inline-flex; align-items: center; justify-content: center; gap: 7px; margin-top: 3px; color: #e7c89f; font: italic 14px/1.3 Georgia, "Palatino Linotype", serif; text-align: center; text-shadow: 0 0 9px rgba(255,120,0,.38); }
+    .arrow::before { content: "☞"; color: var(--accent); font-size: 22px; font-style: normal; }
+    .footer { margin: 26px 20px 0; color: #e7c89f; text-align: center; }
+    .footer b { display: block; font-size: 20px; font-weight: 400; }
+    .footer span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; font-style: italic; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 16px; }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      padding: 9px 13px;
+      border: 1px solid #514f42;
+      border-radius: 6px;
+      background: #191914;
+      color: var(--ink);
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .button:active { transform: scale(.98); }
+    .detail { --accent: var(--orange); }
+    .detail-stage { margin: 4px 16px 0; overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 70%, #000); border-radius: 18px; padding: 8px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.4)); box-shadow: 0 0 34px color-mix(in srgb,var(--accent) 40%,transparent),inset 0 0 20px rgba(0,0,0,.7); }
+    .detail-stage img { display: block; width: 100%; height: auto; border-radius: 11px; }
+    .detail-name-image { display: block; width: min(100% - 80px, 360px); height: auto; margin: 20px auto 0; }
+    .detail-title { margin: 0; }
+    .detail-original { margin: 7px 20px 0; color: var(--muted); text-align: center; font: 13px/1.4 sans-serif; }
+    .description { margin: 16px 25px 0; text-align: center; font-size: 17px; font-style: italic; line-height: 1.5; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 24px 12px; color: var(--accent); font: 700 11px/1.3 sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--accent) 58%, transparent); }
+    .ingredients { display: grid; gap: 7px; margin: 0; padding: 0 18px; list-style: none; }
+    .ingredients li { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 10px 12px; border: 1px solid #34342b; border-radius: 6px; background: #171713; font-size: 16px; }
+    .ingredients li::before { content: "✦"; color: var(--accent); font-size: 13px; }
+    .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 22px 16px 0; }
+    .pager .button { border-color: color-mix(in srgb, var(--accent) 50%, #514f42); text-align: center; }
+    .count { color: var(--muted); font: 12px/1.3 sans-serif; }
+    @media (max-width: 360px) {
+      .card { grid-template-columns: 38% minmax(0, 1fr); gap: 11px; }
+      .teaser { font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .fog i, .bat { animation: none; } *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="fog" aria-hidden="true"><i></i><i></i><i></i></div>
+  <span class="bat" aria-hidden="true">&#129415;</span><span class="bat" aria-hidden="true">&#129415;</span><span class="bat" aria-hidden="true">&#129415;</span>
+  <svg class="web tl" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#cfc6dc" stroke-width=".6"><path d="M0 0 L100 0 M0 0 L100 25 M0 0 L100 50 M0 0 L75 100 M0 0 L40 100 M0 0 L0 100"/><path d="M18 0 Q14 14 0 18 M36 0 Q30 28 0 36 M54 0 Q46 42 0 54 M74 0 Q62 56 0 74 M94 0 Q78 70 0 94"/></g></svg>
+  <svg class="web tr" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#cfc6dc" stroke-width=".6"><path d="M0 0 L100 0 M0 0 L100 25 M0 0 L100 50 M0 0 L75 100 M0 0 L40 100 M0 0 L0 100"/><path d="M18 0 Q14 14 0 18 M36 0 Q30 28 0 36 M54 0 Q46 42 0 54 M74 0 Q62 56 0 74 M94 0 Q78 70 0 94"/></g></svg>
+  <main id="app">
+    <section id="home" aria-label="Översikt">
+      <header class="masthead">
+        <div class="banner"><img src="./assets/original/header.jpg" alt="Spöklik Drinkmeny – Drick om du vågar. Skål för de levande och de döda."></div>
+        <h1 class="visually-hidden">Spöklik Drinkmeny</h1>
+        <p class="subtitle">Tre brygder väntar i mörkret.<br>Drick om du vågar.</p>
+      </header>
+      <nav class="cards" id="cards" aria-label="Välj drink"></nav>
+      <footer class="footer"><b>Trevlig Halloween</b><span>Smaka om du törs.</span></footer>
+    </section>
+    <section id="detail" class="detail" hidden aria-live="polite"></section>
+  </main>
+  <script>
+    (() => {
+      const drinks = [
+        {
+          id: 'bloody', name: 'Bloody Spirits', original: 'Aperol Spritz', accent: '#e0242c',
+          description: 'Ett blodrött elixir som viskar från andra sidan.',
+          ingredients: ['Prosecco', 'Aperol', 'Sodavatten', 'Is', 'Apelsin']
+        },
+        {
+          id: 'witch', name: 'Witch & Toxic', original: 'Gin & Tonic', accent: '#3ddc84',
+          description: 'Häxans giftgröna brygd bubblar i kitteln i midnattens timme.',
+          ingredients: ['Skagerrak Nordic Dry Gin', 'Tonic', 'Lime', 'Rosmarin', 'Is']
+        },
+        {
+          id: 'numb', name: 'Numb & Injured', original: 'Rum & Ginger', accent: '#4fc3f7',
+          description: 'Kylan sätter in och känslan försvinner. Bandagerad, blåslagen och iskall.',
+          ingredients: ['Bacardi Superior white rum', 'Ginger Joe ginger ale', 'Lime', 'Mynta', 'Is']
+        }
+      ];
+      const home = document.querySelector('#home');
+      const detail = document.querySelector('#detail');
+      const cards = document.querySelector('#cards');
+      let currentId = '';
+      let touchStart = null;
+
+      const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[char]);
+      const getIndex = id => drinks.findIndex(drink => drink.id === id);
+      const photoPath = id => `./assets/original/${id}.jpg`;
+      const namePath = id => `./assets/original/${id}-name.png`;
+
+      drinks.forEach(drink => {
+        const link = document.createElement('a');
+        link.className = 'card';
+        link.href = `#${drink.id}`;
+        link.style.setProperty('--accent', drink.accent);
+        link.setAttribute('aria-label', `${drink.name}, ${drink.original}`);
+        link.innerHTML = `<span class="art"><img src="${photoPath(drink.id)}" alt="" loading="lazy"></span><span class="info"><img class="name-image" src="${namePath(drink.id)}" alt=""><span class="original">(${escapeHTML(drink.original)})</span><span class="teaser">${escapeHTML(drink.description)}</span><span class="arrow">Visa drink &#8250;</span></span>`;
+        cards.append(link);
+      });
+
+      function showHome() {
+        currentId = '';
+        detail.hidden = true;
+        home.hidden = false;
+        document.title = 'Spöklik Drinkmeny';
+      }
+
+      function showDrink(index) {
+        const drink = drinks[index];
+        const previous = drinks[(index + drinks.length - 1) % drinks.length];
+        const next = drinks[(index + 1) % drinks.length];
+        currentId = drink.id;
+        detail.style.setProperty('--accent', drink.accent);
+        detail.innerHTML = `<div class="topbar"><a class="button" href="#">&#8592; Till menyn</a><span class="count">${index + 1} / ${drinks.length}</span></div><div class="detail-stage"><img src="${photoPath(drink.id)}" alt="${escapeHTML(drink.name)} – ${escapeHTML(drink.original)}"></div><h2 class="visually-hidden detail-title">${escapeHTML(drink.name)}</h2><img class="detail-name-image" src="${namePath(drink.id)}" alt=""><p class="detail-original">(${escapeHTML(drink.original)})</p><p class="description">${escapeHTML(drink.description)}</p><div class="divider">Innehåll</div><ul class="ingredients">${drink.ingredients.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul><nav class="pager" aria-label="Bläddra bland drinkar"><a class="button" href="#${previous.id}">&#8249; ${escapeHTML(previous.name)}</a><a class="button" href="#${next.id}">${escapeHTML(next.name)} &#8250;</a></nav>`;
+        home.hidden = true;
+        detail.hidden = false;
+        document.title = `${drink.name} - Spöklik Drinkmeny`;
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      function render() {
+        const id = decodeURIComponent(location.hash.slice(1));
+        const index = getIndex(id);
+        if (index >= 0) showDrink(index);
+        else showHome();
+      }
+
+      document.addEventListener('click', event => {
+        const link = event.target.closest('a');
+        if (!link || !link.matches('.card, .topbar a, .pager a')) return;
+        event.preventDefault();
+        if (link.matches('.topbar a')) history.pushState(null, '', location.pathname + location.search);
+        else history.pushState(null, '', link.getAttribute('href'));
+        render();
+      });
+      window.addEventListener('popstate', render);
+      window.addEventListener('hashchange', render);
+      document.addEventListener('touchstart', event => {
+        if (detail.hidden) return;
+        touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+      }, { passive: true });
+      document.addEventListener('touchend', event => {
+        if (!touchStart || detail.hidden) return;
+        const dx = event.changedTouches[0].clientX - touchStart.x;
+        const dy = event.changedTouches[0].clientY - touchStart.y;
+        touchStart = null;
+        if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        const index = getIndex(currentId);
+        const destination = dx < 0 ? (index + 1) % drinks.length : (index + drinks.length - 1) % drinks.length;
+        history.pushState(null, '', `#${drinks[destination].id}`);
+        render();
+      }, { passive: true });
+      render();
+      if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+      }
+    })();
+  </script>
+</body>
+</html>
